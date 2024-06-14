@@ -50,7 +50,13 @@ func (pInst *CGatlingLogClient) logPut(url, log string) error {
 		req.Header.Set("X-API-KEY", pInst.token)
 	}
 
-	client := &http.Client{}
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+		Timeout: 10,
+	}
+	//client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
